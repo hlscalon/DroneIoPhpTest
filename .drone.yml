@@ -10,4 +10,5 @@ steps:
 - name: test
   image: php:7.2
   commands:
-  - ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests/
+  - sh runCodeSniffer.sh
+  - sh runTests.sh
