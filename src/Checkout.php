@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-class Checkout {
+namespace App;
+
+class Checkout
+{
 
     private $availableItems = [
         "wine" => 30,
@@ -14,13 +17,15 @@ class Checkout {
 
     private $cart = [];
 
-    public function __construct($customerName) {
+    public function __construct($customerName)
+    {
         $this->customerName = $customerName;
     }
 
-    public function addItem($item, $quantity = 1) : void {
+    public function addItem($item, $quantity = 1) : void
+    {
         if (!isset($this->availableItems[$item])) {
-            throw new InvalidArgumentException("Item not available");
+            throw new \InvalidArgumentException("Item not available");
         }
 
         if (!isset($this->cart[$item])) {
@@ -30,13 +35,14 @@ class Checkout {
         $this->cart[$item] += $quantity;
     }
 
-    public function removeItem($item, $quantity = 1) : void {
+    public function removeItem($item, $quantity = 1) : void
+    {
         if (!isset($this->cart[$item])) {
-            throw new InvalidArgumentException("Item not bought");
+            throw new \InvalidArgumentException("Item not bought");
         }
 
         if ($this->cart[$item] - $quantity < 0) {
-            throw new InvalidArgumentException("Wrong quantity to remove");
+            throw new \InvalidArgumentException("Wrong quantity to remove");
         }
 
         $this->cart[$item] -= $quantity;
@@ -46,9 +52,10 @@ class Checkout {
         }
     }
 
-    public function getTotalToPay() : float {
+    public function getTotalToPay() : float
+    {
         if (empty($this->cart)) {
-            throw new Exception("Cart is empty");
+            throw new \Exception("Cart is empty");
         }
 
         $total = 0.0;
