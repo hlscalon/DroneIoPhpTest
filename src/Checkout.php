@@ -18,7 +18,7 @@ class Checkout {
         $this->customerName = $customerName;
     }
 
-    public function addItem($item, $qty = 1) : void {
+    public function addItem($item, $quantity = 1) : void {
         if (!isset($this->availableItems[$item])) {
             throw new InvalidArgumentException("Item not available");
         }
@@ -27,31 +27,35 @@ class Checkout {
             $this->cart[$item] = 0;
         }
 
-        $this->cart[$item] += $qty;
+        $this->cart[$item] += $quantity;
     }
 
-    public function removeItem($item, $qty = 1) : void {
+    public function removeItem($item, $quantity = 1) : void {
         if (!isset($this->cart[$item])) {
             throw new InvalidArgumentException("Item not bought");
         }
 
-        $this->cart[$item] -= $qty;
+        if ($this->cart[$item] - $quantity < 0) {
+            throw new InvalidArgumentException("Wrong quantity to remove");
+        }
+
+        $this->cart[$item] -= $quantity;
 
         if ($this->cart[$item] <= 0) {
             unset($this->cart[$item]);
         }
     }
 
-    public function doCheckout() : double {
-        if (empty($cart)) {
+    public function getTotalToPay() : float {
+        if (empty($this->cart)) {
             throw new Exception("Cart is empty");
         }
 
         $total = 0.0;
-        foreach ($this->cart as $item => $qty) {
-            $total += $this->availableItems[$item] * $qty;
+        foreach ($this->cart as $item => $quantity) {
+            $total += $this->availableItems[$item] * $quantity;
         }
 
-        return $total;
+        return (float) $total;
     }
 }

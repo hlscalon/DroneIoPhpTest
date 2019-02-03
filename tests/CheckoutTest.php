@@ -36,4 +36,34 @@ class CheckoutTest extends TestCase {
         $this->instance->addItem("fish oil", 2);
     }
 
+    public function testRemoveItemCartCorrectly() : void {
+        $this->instance->addItem("tuna", 2);
+        $this->instance->removeItem("tuna", 2);
+
+        $this->addToAssertionCount(1);
+    }
+
+    public function testRemoveItemCartMissingProduct() : void {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->instance->addItem("tuna", 2);
+        $this->instance->removeItem("soda", 2);
+    }
+
+    public function testRemoveItemCartWrongQuantity() : void {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->instance->addItem("tuna", 2);
+        $this->instance->removeItem("tuna", 3);
+    }
+
+    public function testGetTotalToPay() : void {
+        $this->instance->addItem("tuna", 3);
+        $this->instance->addItem("wine", 1);
+        $this->instance->removeItem("tuna", 1);
+
+        $total = $this->instance->getTotalToPay();
+
+        $this->assertEquals($total, 40);
+    }
 }
